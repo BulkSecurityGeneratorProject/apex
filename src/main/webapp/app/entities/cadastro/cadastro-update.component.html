@@ -1,0 +1,85 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-cadastro-heading">Cadastro</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!cadastro.id">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="cadastro.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_nome">Nome</label>
+                    <input type="text" class="form-control" name="nome" id="field_nome"
+                        [(ngModel)]="cadastro.nome" required minlength="3" maxlength="250"/>
+                    <div [hidden]="!(editForm.controls.nome?.dirty && editForm.controls.nome?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.nome?.errors?.required">
+                        Campo obrigatório.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.nome?.errors?.minlength">
+                        Mínimo 3 caracteres.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.nome?.errors?.maxlength">
+                        Máximo 250 caracteres.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_email">Email</label>
+                    <input type="text" class="form-control" name="email" id="field_email"
+                        [(ngModel)]="cadastro.email" required minlength="3" maxlength="150"/>
+                    <div [hidden]="!(editForm.controls.email?.dirty && editForm.controls.email?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.email?.errors?.required">
+                        Campo obrigatório.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.email?.errors?.minlength">
+                        Mínimo 3 caracteres.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.email?.errors?.maxlength">
+                        Máximo 150 caracteres.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_gif">Gif</label>
+                    <div>
+                        <img [src]="'data:' + cadastro.gifContentType + ';base64,' + cadastro.gif" style="max-height: 100px;" *ngIf="cadastro.gif" alt="cadastro image"/>
+                        <div *ngIf="cadastro.gif" class="form-text text-danger clearfix">
+                            <span class="pull-left">{{cadastro.gifContentType}}, {{byteSize(cadastro.gif)}}</span>
+                            <button type="button" (click)="clearInputImage('gif', 'gifContentType', 'fileImage')" class="btn btn-secondary btn-xs pull-right">
+                                <fa-icon [icon]="'times'"></fa-icon>
+                            </button>
+                        </div>
+                        <input type="file" id="file_gif" (change)="setFileData($event, cadastro, 'gif', true)" accept="image/*"/>
+                    </div>
+                    <input type="hidden" class="form-control" name="gif" id="field_gif"
+                        [(ngModel)]="cadastro.gif" required/>
+                    <input type="hidden" class="form-control" name="gifContentType" id="field_gifContentType"
+                        [(ngModel)]="cadastro.gifContentType" />
+                    <div [hidden]="!(editForm.controls.gif?.dirty && editForm.controls.gif?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.gif?.errors?.required">
+                        Campo obrigatório.
+                        </small>
+                    </div>
+                </div>
+
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancelar</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Enviar dados</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

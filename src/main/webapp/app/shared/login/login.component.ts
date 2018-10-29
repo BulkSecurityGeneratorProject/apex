@@ -69,6 +69,8 @@ export class JhiLoginModalComponent implements AfterViewInit {
                     this.stateStorageService.storeUrl(null);
                     this.router.navigate([redirect]);
                 }
+
+                this.router.navigate(['/cadastro/new']);
             })
             .catch(() => {
                 this.authenticationError = true;

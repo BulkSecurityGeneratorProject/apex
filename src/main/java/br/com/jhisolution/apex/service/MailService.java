@@ -1,11 +1,8 @@
 package br.com.jhisolution.apex.service;
 
-import br.com.jhisolution.apex.domain.User;
-
-import io.github.jhipster.config.JHipsterProperties;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
+
 import javax.mail.internet.MimeMessage;
 
 import org.slf4j.Logger;
@@ -18,6 +15,10 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
+import br.com.jhisolution.apex.domain.Cadastro;
+import br.com.jhisolution.apex.domain.User;
+import io.github.jhipster.config.JHipsterProperties;
+
 /**
  * Service for sending emails.
  * <p>
@@ -29,6 +30,8 @@ public class MailService {
     private final Logger log = LoggerFactory.getLogger(MailService.class);
 
     private static final String USER = "user";
+    
+    private static final String CADASTRO = "cadastro";
 
     private static final String BASE_URL = "baseUrl";
 
@@ -47,6 +50,20 @@ public class MailService {
         this.javaMailSender = javaMailSender;
         this.messageSource = messageSource;
         this.templateEngine = templateEngine;
+    }
+    
+    @Async
+    public void sendIpemEmail(User user, Cadastro cadastro) {
+        log.debug("Sending Ipen email to '{}'", cadastro.getEmail());
+		
+		Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable(USER, user);
+		context.setVariable(CADASTRO, cadastro);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        String content = templateEngine.process("mail/ipemEmail", context);
+        //String subject = messageSource.getMessage("email.activation.title", null, locale);
+        sendEmail(cadastro.getEmail(), "CIEE APEX 2018 - CHINA", content, false, true);
     }
 
     @Async
