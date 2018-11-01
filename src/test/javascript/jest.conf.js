@@ -18,5 +18,10 @@ module.exports = {
     testResultsProcessor: 'jest-sonar-reporter',
     transformIgnorePatterns: ['node_modules/(?!@angular/common/locales)'],
     testMatch: ['<rootDir>/src/test/javascript/spec/**/+(*.)+(spec.ts)'],
-    rootDir: '../../../'
+    rootDir: '../../../',
+
+    //Path generated code
+    //To correct SecurityError: localStorage
+    testEnvironment: "jsdom",
+    testURL: "http://localhost/"
 };
